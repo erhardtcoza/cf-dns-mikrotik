@@ -98,13 +98,31 @@ async function updateRecord(name) {
         <CardContent className="overflow-x-auto p-4">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead>DNS Name</TableHead>
-                <TableHead>IP Address</TableHead>
-                <TableHead>Last Updated</TableHead>
-                <TableHead>Uptime (est.)</TableHead>
-                <TableHead>Action</TableHead>
-              </TableRow>
+              <TableCell>
+  {editing === record.name ? (
+    <>
+      <Input
+        className="w-32 inline mr-2"
+        value={newIP}
+        onChange={e => setNewIP(e.target.value)}
+        placeholder="New IP"
+      />
+      <Button size="sm" onClick={() => updateRecord(record.name)}>Save</Button>
+      <Button size="sm" variant="outline" onClick={() => setEditing(null)}>Cancel</Button>
+    </>
+  ) : (
+    <>
+      <Button size="sm" className="mr-2" onClick={() => {
+        setEditing(record.name);
+        setNewIP(record.content);
+      }}>Edit</Button>
+      <Button size="sm" variant="destructive" onClick={() => deleteRecord(record.name)}>
+        Delete
+      </Button>
+    </>
+  )}
+</TableCell>
+
             </TableHeader>
             <TableBody>
               {filtered.map((record, idx) => {
@@ -131,6 +149,20 @@ async function updateRecord(name) {
         setEditing(record.name);
         setNewIP(record.content);
       }}>Edit</Button>
+   async function updateRecord(name) {
+  const res = await fetch(`/admin/update`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, ip: newIP })
+  });
+  if (res.ok) {
+    setEditing(null);
+    fetchRecords();
+  } else {
+    alert("Failed to update");
+  }
+}
+
       <Button size="sm" variant="destructive" onClick={() => deleteRecord(record.name)}>Delete</Button>
     </>
   )}
