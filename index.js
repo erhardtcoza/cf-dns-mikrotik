@@ -2,6 +2,10 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
+  
+    if (request.method === "POST" && path === "/admin/update") {
+  return await handleManualUpdate(request, env);
+}
 
     if (request.method === "GET" && path === "/dns-dashboard") {
       return await handleDashboard(env);
@@ -49,6 +53,32 @@ async function handleDashboard(env) {
       "Cache-Control": "public, max-age=60"
     },
   });
+}
+async function handleManualUpdate(request, env) {
+  const cookie = request.headers.get("Cookie") || "";
+  if (!cookie.includes("auth=1")) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
+  const body = await request.json();
+  const { name, ip } = body;
+
+  if (!name || !ip) {
+    return new Response("Missing name or ip", { status: 400 });
+  }
+
+  // Fetch current DNS record
+  const zone = env.CF_ZONE_ID;
+  const token = env.CF_API_TOKEN;
+  const headers = { Authorization: `Bearer ${token}` };
+  const fetchURL = `https://api.cloudflare.com/client/v4/zones/${zone}/dns_records?name=${name}`;
+  const fetchRes = await fetch(fetchURL, { headers });
+  const fetchJson = await fetchRes.json();
+
+  const record = (fetchJson.result || [])[0] || null;
+
+  const result = await handleDNSUpdate(env, name, ip, record);
+  return new Response(result, { status: 200 });
 }
 
 async function handleUpdate(request, env) {
