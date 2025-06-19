@@ -12,6 +12,19 @@ export default function DNSDashboard() {
   const [editing, setEditing] = useState(null);
   const [newIP, setNewIP] = useState("");
 
+async function updateRecord(name) {
+  const res = await fetch(`/admin/update`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, ip: newIP })
+  });
+  if (res.ok) {
+    setEditing(null);
+    fetchRecords();
+  } else {
+    alert("Failed to update");
+  }
+}
 
   async function handleLogin() {
     const res = await fetch("/admin/session", {
