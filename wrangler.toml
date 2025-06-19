@@ -9,3 +9,7 @@ CF_API_TOKEN = "BIG5-Hmwq1sQc7_RumFBTp8tOIJX7DIqvOeBf5oW"
 [[kv_namespaces]]
 binding = "DNS_KV"
 id = "099ffd3522fd44c4bcb8cf355b85a3a3"
+
+[env.production]
+name = "cf-dns-updater"
+vars = { CF_ZONE_ID = "your_zone_id", CF_API_TOKEN = "use env" }
