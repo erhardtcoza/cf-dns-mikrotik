@@ -1,4 +1,4 @@
-name = "cf-dns-updater"
+name = "cloudflare-dns-updater"
 main = "index.js"
 compatibility_date = "2024-01-01"
 
