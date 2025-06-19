@@ -1,0 +1,11 @@
+name = "cf-dns-updater"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+CF_ZONE_ID = "b1a9827c098f4169a0f2d7efe7e073a7"
+CF_API_TOKEN = "BIG5-Hmwq1sQc7_RumFBTp8tOIJX7DIqvOeBf5oW"
+
+[[kv_namespaces]]
+binding = "DNS_KV"
+id = "099ffd3522fd44c4bcb8cf355b85a3a3"
