@@ -9,6 +9,9 @@ export default function DNSDashboard() {
   const [filter, setFilter] = useState("");
   const [auth, setAuth] = useState(false);
   const [password, setPassword] = useState("");
+  const [editing, setEditing] = useState(null);
+  const [newIP, setNewIP] = useState("");
+
 
   async function handleLogin() {
     const res = await fetch("/admin/session", {
