@@ -2,6 +2,10 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
+  
+    if (request.method === "POST" && path === "/admin/update") {
+  return await handleManualUpdate(request, env);
+}
 
     if (request.method === "GET" && path === "/dns-dashboard") {
       return await handleDashboard(env);
