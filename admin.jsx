@@ -100,12 +100,29 @@ export default function DNSDashboard() {
                 const readable = uptime < 60 ? `${uptime} min` : `${(uptime / 60).toFixed(1)} hrs`;
                 return (
                   <TableRow key={idx}>
-                    <TableCell>{record.name}</TableCell>
-                    <TableCell>{record.content}</TableCell>
-                    <TableCell>{record.updated || "-"}</TableCell>
-                    <TableCell>{record.updated ? readable : "-"}</TableCell>
-                    <TableCell>
-                      <Button size="sm" variant="destructive" onClick={() => deleteRecord(record.name)}>
+                  <TableCell>
+  {editing === record.name ? (
+    <>
+      <Input
+        className="w-32 inline mr-2"
+        value={newIP}
+        onChange={e => setNewIP(e.target.value)}
+        placeholder="New IP"
+      />
+      <Button size="sm" onClick={() => updateRecord(record.name)}>Save</Button>
+      <Button size="sm" variant="outline" onClick={() => setEditing(null)}>Cancel</Button>
+    </>
+  ) : (
+    <>
+      <Button size="sm" className="mr-2" onClick={() => {
+        setEditing(record.name);
+        setNewIP(record.content);
+      }}>Edit</Button>
+      <Button size="sm" variant="destructive" onClick={() => deleteRecord(record.name)}>Delete</Button>
+    </>
+  )}
+</TableCell>
+    <Button size="sm" variant="destructive" onClick={() => deleteRecord(record.name)}>
                         Delete
                       </Button>
                     </TableCell>
